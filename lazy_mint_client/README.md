@@ -38,7 +38,7 @@
  ```Javascript
  
      async function mintHandle(msg, sig) {
-        console.log(msg , sig)
+        console.log(msg ,sig)
         if (window.ethereum) {
             const provider = new ethers.providers.Web3Provider(window.ethereum)
             const signer = provider.getSigner();
