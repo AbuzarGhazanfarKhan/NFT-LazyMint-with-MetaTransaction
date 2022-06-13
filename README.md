@@ -1,6 +1,6 @@
 # NFT-LazyMint-with-MetaTransaction
 ## Code on Master Branch
-### Here is the flow I am talking about:-
+### Here is the flow of the dapp:-
 ### 1) An address will be stored/authenticated in the database beforehand 
 ### 2) When user comes to the site to mint, we authenticate them by asking them to sign a message, and using verifyMessage (ethers.js) on the Backend we recover the
 ### public key of the user
