@@ -49,8 +49,8 @@ function Minter({accounts, setAccounts}) {
                 const hash = await contract.getMessageHash(message)
                 console.log(hash)
                 const sig = await signer.signMessage(ethers.utils.arrayify(hash))
-                console.log(sig)
-                console.log(message)   
+                // console.log(sig)
+                // console.log(message)   
                 postSigAndMessage(sig)
                 setSignature(sig)
             }
@@ -72,7 +72,7 @@ function Minter({accounts, setAccounts}) {
                setError(response.data.error)
            }
            else if (response.data.response) {
-               console.log(response.data.response)
+            //    console.log(response.data.response)
             setError(response.data.response)
            }
       }, (error) => {
@@ -84,20 +84,28 @@ function Minter({accounts, setAccounts}) {
         await Axios.put("http://127.0.0.1:8000/signature", { Name: message })
             .then((response) => {
                 console.log(response.data)
+                console.log(response.data.response.error)
+                // console.log(response.error)
+                if (response.data.response.error) {
+                    setError(response.data.response.error)
+                }
+                else{
                 setDataResponse(response.data.response)
                 let sig =  response.data.response.Signature
                 let msg =  response.data.response.Name
-                console.log(msg)
-                console.log(sig)
-                mintHandle(msg, sig)
+                // console.log(msg)
+                // console.log(sig)
+                mintHandle(msg, sig)}
             
-            })
+            }, (error) => {
+                setError(error.message);
+               })
         
     }
     const afterExecute = async () => {
         await Axios.put("http://127.0.0.1:8000/signature", { Name: message,Executed:true })
             .then((response) => {
-                console.log(response.success)
+                // console.log(response.success)
 
             
             })
@@ -111,22 +119,30 @@ function Minter({accounts, setAccounts}) {
         <>
             <div>
                 <center>
-          <h2>  <ErrorMessage message={error}></ErrorMessage></h2>
+                    <div style={{backgroundColor:"#f6fba2",backgroundImage:"linear-gradient(315deg, #f6fba2 0%, #20ded3 74%)", border: "solid 2px red",width:"70%",boxShadow:"1px 3px 20px" }}> <h3>Notification:<ErrorMessage message={error}></ErrorMessage></h3></div>
+                    <br />
+       
+                    <div style={{backgroundColor:"#b1ade2",backgroundImage:"linear-gradient(315deg, #b1ade2 0%, #7ddff8 74%)", border: "solid 2px Green",width:"70%",boxShadow:"1px 3px 20px",marginTop:"4px" }}>
                     <h1>Message Signature For Contract Owner</h1>
                     <form onSubmit={handleSubmit}>
-                    <p>Message:  <input type="text" name="message" value={message} onChange={handleChange}/> <br /> { message }</p>
+                    <p>Message:  <input type="text" name="message" value={message} onChange={handleChange}/>{ message }</p>
                     <button onClick={createSignature}> Sign Message </button>
                     <p>Signature : {signature}</p>
-                </form>
+                        </form>
+                        </div>
                 </center>
-        <hr />
+       
                 <br />
                 <center>
+                <div style={{backgroundColor:"#b1ade2",backgroundImage:"linear-gradient(315deg, #b1ade2 0%, #7ddff8 74%)",border: "solid 2px purple",width:"70%",boxShadow:"1px 3px 20px",marginTop:"4px" }}>
+                   
                     <h1>Mint NFT By Entering NFT Token name</h1>
-                <p>Message:  <input type="text" name="message" value={message} onChange={handleChange}/> <br /> { message }</p>
+                <p>Message:  <input type="text" name="message" value={message} onChange={handleChange}/>  { message }</p>
                     <button onClick={putNameAndSignature}>Mint NFT</button>
-                    <h2> Name: {dataResponse.Name} , Signature: {dataResponse.Signature} </h2>
-                </center>
+                    <h2>  Name of NFT: {dataResponse.Name} , Signature Redeemed: {dataResponse.Signature} </h2>
+                  
+                    </div>
+                    </center>
             </div>
     
         </>
@@ -135,4 +151,6 @@ function Minter({accounts, setAccounts}) {
     );
   }
   
-  export default Minter;
+export default Minter;
+// background-color: #f6fba2;
+// background-image: linear-gradient(315deg, #f6fba2 0%, #20ded3 74%);
